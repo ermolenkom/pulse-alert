@@ -1,5 +1,6 @@
 #include <pebble_worker.h>
 #include "worker.h"
+#include "http.h"
 
 ClaySettings settings;
 
@@ -44,6 +45,8 @@ static void prv_on_health_data(HealthEventType type, void *context) {
     APP_LOG(APP_LOG_LEVEL_DEBUG, "current heart rate: %lu", (uint32_t) value);
     prv_load_settings();
 
+	http_get("http://alyssa.is");
+	
     if ((value >= settings.Threshold) && (time(NULL) - settings.SnoozeUntil >= 0)) {
       snooze(time(NULL) + settings.Backoff * 6);
       worker_launch_app();
